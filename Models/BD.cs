@@ -48,41 +48,68 @@ namespace TP24234.Models
         }
 
 
-        public static void CrearTarea (Tarea t)
-        {using (SqlConnection connection = new SqlConnection(_connectionString))
+        public static void CrearTarea(Tarea t)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = " INSERT INTO Tareas (Titulo, Descripcion, Fecha, Finalizada, IdUsuario) VALUES ('Estudiar para el examen', 'Repasar temas de base de datos', '2025-08-10', 0, 1)";
+                string query = " INSERT INTO Tareas (Titulo, Descripcion, Fecha, Finalizada, IdUsuario) VALUES (@t.Titulo, @t.Descripcion, @t.Fecha, @t.Finalizada, @t.IdUsuario)";
 
-                connection.Execute(query, new{ nombre, usuario, contraseña, frase, hobby, profeFav, peliculaFav, IDgrupo, foto });
+                connection.Execute(query, new { t.Titulo, t.Descripcion, t.Fecha, t.Finalizada, t.IdUsuario });
             }
-           
+
         }
 
 
-        /*public void EliminarTarea (int IDtarea)
+        public static void EliminarTarea (int IDtarea)   
         {
-            return
-        }*/
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = " DELETE FROM Tareas WHERE ID = @IDtarea";
 
-        /*public Tarea TraerTarea (int IDtarea)
-        {
-            return
-        }*/
+                connection.Execute(query, new { IDtarea });
+            }
+        }
 
-        /*public void ActualizarTarea (Tarea t)
+        public static Tarea TraerTarea (int IDtarea)
         {
-            return
-        }*/
+            Tarea t = new Tarea();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Tareas WHERE ID = @idtarea";
+                t = connection.QueryFirstOrDefault<Tarea>(query, new { idtarea = IDtarea });
+            }
 
-        /*public void FinalizarTarea (int IDtarea)
-        {
-            return
-        }*/
+            return t;
 
-        /*public void ActualizarFechaLogin (int IDusuario)
+        }
+
+        public static void ActualizarTarea (Tarea t)
         {
-            return
-        }*/
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Tareas SET Titulo = @t.Titulo, Descripcion = @t.Descripcion, Fecha = @t.Fecha WHERE ID = t.ID";
+                 connection.Execute(query, new {  t.ID, t.Titulo, t.Descripcion, t.Fecha });
+            }
+
+        }
+
+        public static void FinalizarTarea (int IDtarea)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Tareas SET Finalizada = 1 WHERE ID = @IDtarea";
+                 connection.Execute(query, new { IDtarea });
+            }
+        }
+
+        public static void ActualizarFechaLogin (int IDusuario)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Usuarios SET UltimoLogin = GETDATE() WHERE ID = @IDusuario";
+                 connection.Execute(query, new { IDusuario });
+            }
+        }
 
 
     }
