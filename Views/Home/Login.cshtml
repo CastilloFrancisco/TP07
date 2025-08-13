@@ -3,7 +3,7 @@
 }
 
 <div>
-    <h1>ToDoList</h1>
+    <h1>Iniciar Sesión</h1>
 
     @if (ViewBag.Error == true)
     {
@@ -13,7 +13,7 @@
     <form action='@Url.Action("Login", "Home")' method="POST" enctype="multipart/form-data">
         <input type="text" name="usuario" placeholder="Usuario" required />
         <input type="password" name="contraseña" placeholder="Contraseña" required />
-
+        
         <input type="submit" value="Iniciar Sesión" class="btn-login" />
     </form>
 
