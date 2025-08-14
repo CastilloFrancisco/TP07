@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using TP24234.Models;
+using TP07.Models;
 using Newtonsoft.Json;
 
-namespace TP24234.Models
-{   
+namespace TP07.Models
+{
     public class Tarea
     {
         [JsonProperty]
@@ -15,17 +15,24 @@ namespace TP24234.Models
         [JsonProperty]
         public string Descripcion { get; set; }
         [JsonProperty]
-        public string Fecha { get; set; }
+        public DateOnly Fecha { get; set; }
         [JsonProperty]
-        public string Finalizada { get; set; }
+        public bool Finalizada { get; set; }
         [JsonProperty]
-        public string IdUsuario { get; set; }
-    
+        public int IdUsuario { get; set; }
+
         public Tarea()
         {
-    
+
+        }
+        public Tarea( string pTitulo, string pDescripcion, DateOnly pFecha, bool pFinalizada, int IdU)
+        {
+            Titulo = pTitulo;
+            Descripcion = pDescripcion; 
+            Fecha = pFecha; 
+            Finalizada = pFinalizada;
+            IdUsuario = IdU;
         }
 
-        
     }
 }

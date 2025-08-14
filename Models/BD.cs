@@ -3,7 +3,7 @@ using Dapper;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TP24234.Models
+namespace TP07.Models
 {
     public static class BD
     {

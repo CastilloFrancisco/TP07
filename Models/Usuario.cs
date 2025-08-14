@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using TP24234.Models;
+using TP07.Models;
 using Newtonsoft.Json;
 
-namespace TP24234.Models
+namespace TP07.Models
 {
     public class Usuario
     {
@@ -27,6 +27,7 @@ namespace TP24234.Models
         {
 
         }
+        
 
         
     }

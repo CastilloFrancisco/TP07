@@ -1,9 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TP24234.Models;
-using TP7.Models;
+using TP07.Models;
 
-namespace TP7.Controllers;
+namespace TP07.Controllers;
 
 public class AccountController : Controller
 {
@@ -25,7 +24,6 @@ public class AccountController : Controller
 
             return RedirectToAction();
         }
-
 
         ViewBag.Error = true;
         return View("Index");

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TP7.Models;
+using TP07.Models;
 
 namespace TP7.Controllers;
 
@@ -18,18 +18,25 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult CargarTareas()
+    public IActionResult CargarTareas(int IDu)
     {
+        ViewBag.TareasIntegrante = BD.DevolverTareas(IDu);
+
         return View();
     }
 
     public IActionResult CrearTarea()
     {
-        return View();
+
+        return View("Login.cshtml");
     }
 
-    public IActionResult CrearTareaGuardar()
+    public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateOnly Fecha, bool Finalizada)
     {
+        Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada);
+        HttpContext.Session.SetString("usuario",tareaNueva.IdUsuario.ToString(usuario));
+        
+        BD.CrearTarea(tareaNueva);
         return View();
     }
 
