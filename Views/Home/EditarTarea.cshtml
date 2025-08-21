@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+
+    <form action='@Url.Action("Account", "Home")' method="POST" enctype="multipart/form-data">
+
+        Nombre de La Tarea: (Actualmente @(ViewBag.TareaEditar.Nombre))
+        <input type="text" name="nombre" placeholder="Nombre de Tarea" required />
+        Descripción (Actualmente @(ViewBag.TareaEditar.Descripción))
+        <input type="text" name="desc" placeholder="Descripción" required />
+        Descripción (Actualmente @(ViewBag.TareaEditar.Fecha))
+        <input type="date" name="fechaF" placeholder="Fecha de Finalización" required />
+        
+        <input type="submit" value="Iniciar Sesión" class="btn-login" />
+    </form>
+
+</div>

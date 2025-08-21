@@ -1,20 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tareas";
 }
 
-<div>
-    <h1>ToDoList</h1>
+<section>
 
-    @if (ViewBag.Error == true)
-    {
-        <p class="error-msg">Verifique su usuario y contraseña</p>
-    }
+    <div>
 
-    <form action='@Url.Action("Login", "Home")' method="POST" enctype="multipart/form-data">
-        <input type="text" name="usuario" placeholder="Usuario" required />
-        <input type="password" name="contraseña" placeholder="Contraseña" required />
+        <img src= @ViewBag.Usuario.Foto alt = ''><img>
+        <h2>@(ViewBag.Usuario.Nombre) @(ViewBag.Usuario.Apellido)</h2>
+        <h5>@(ViewBag.Usuario.Username)</h5>
+        <h5>Primer Login desde @(ViewBag.Usuario.Fecha)</h5>
 
-        <input type="submit" value="Iniciar Sesión" class="btn-login" />
-    </form>
+    </div>
 
-</div>
+</section>

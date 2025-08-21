@@ -15,11 +15,16 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        if(int.Parse(HttpContext.Session.GetString("logeado") = null || int.Parse(HttpContext.Session.GetString("logeado") = 0){
+                    return View("Login");
+
+        }
         return View();
     }
 
-    public IActionResult CargarTareas(int IDu)
+    public IActionResult CargarTareas()
     {
+        int IDu = int.Parse(HttpContext.Session.GetString("logeado"));
         ViewBag.TareasIntegrante = BD.DevolverTareas(IDu);
 
         return View();
@@ -33,29 +38,37 @@ public class HomeController : Controller
 
     public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateOnly Fecha, bool Finalizada)
     {
-        Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada);
-        HttpContext.Session.SetString("usuario",tareaNueva.IdUsuario.ToString(usuario));
-        
+        int IDu = int.Parse(HttpContext.Session.GetString("logeado"));
+
+        Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada, IDu);
+
         BD.CrearTarea(tareaNueva);
         return View();
     }
 
-    public IActionResult FinalizarTarea()
+    public IActionResult FinalizarTarea(int idTarea)
     {
+        BD.FinalizarTarea(idTarea);
+
         return View();
     }
 
-    public IActionResult EliminarTarea()
+    public IActionResult EliminarTarea(int idTarea)
     {
+        BD.FinalizarTarea(idTarea);
+
         return View();
     }
 
-    public IActionResult EditarTarea()
+    public IActionResult EditarTarea(int idTarea)
     {
+        ViewBag.TareaAEditar = BD.TraerTarea(idTarea);
         return View();
     }
-    public IActionResult EditarTareaGuardar()
+    public IActionResult EditarTareaGuardar(int idTarea)
     {
+        BD.FinalizarTarea(idTarea);
+
         return View();
     }
 }

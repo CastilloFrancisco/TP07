@@ -22,7 +22,7 @@ public class AccountController : Controller
 
             HttpContext.Session.SetString("UsuarioId", integrante.ID.ToString());
 
-            return RedirectToAction();
+            return View();
         }
 
         ViewBag.Error = true;
