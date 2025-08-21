@@ -15,7 +15,7 @@ namespace TP07.Models
         [JsonProperty]
         public string Descripcion { get; set; }
         [JsonProperty]
-        public DateOnly Fecha { get; set; }
+        public DateTime Fecha { get; set; }
         [JsonProperty]
         public bool Finalizada { get; set; }
         [JsonProperty]
@@ -25,7 +25,7 @@ namespace TP07.Models
         {
 
         }
-        public Tarea( string pTitulo, string pDescripcion, DateOnly pFecha, bool pFinalizada, int IdU)
+        public Tarea( string pTitulo, string pDescripcion, DateTime pFecha, bool pFinalizada, int IdU)
         {
             Titulo = pTitulo;
             Descripcion = pDescripcion; 

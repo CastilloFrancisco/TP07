@@ -7,7 +7,7 @@ namespace TP07.Models
 {
     public static class BD
     {
-        private static string _connectionString = "Server=localhost;Database=TP6_Introducciónabasededatos;Integrated Security=True;TrustServerCertificate=True;";
+        private static string _connectionString = "Server=localhost;Database=ToDoList;Integrated Security=True;TrustServerCertificate=True;";
 
         public static Usuario Login(string user)
         {
@@ -36,14 +36,36 @@ namespace TP07.Models
             return logeado;
         }
 
+        public static Usuario TraerUsuarioPorId(int ID)
+        {
+            Usuario u = new Usuario();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Usuarios WHERE ID = @pId";
+                u = connection.QueryFirstOrDefault<Usuario>(query, new { pId = ID });
+            }
 
-        public static List<Usuario> DevolverTareas(int IDusuario)
+            return u;
+        }
+
+        public static void CrearUsuario(Usuario u)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "INSERT INTO Usuarios (Username, Pass, Nombre, Apellido, Foto, UltimoLogin) " +
+                               "VALUES (@u.Username, @u.Pass, @u.Nombre, @u.Apellido, @u.Foto, @u.UltimoLogin)";
+
+                connection.Execute(query, new {u.Username, u.Pass, u.Nombre, u.Apellido, u.Foto, u.UltimoLogin});
+            }
+        }
+
+        public static List<Tarea> DevolverTareas(int IDusuario)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SELECT * FROM Tareas WHERE IdUsuario = @idUsuario";
 
-                return connection.Query<Usuario>(query, new { idUsuario = IDusuario }).ToList();
+                return connection.Query<Tarea>(query, new { idUsuario = IDusuario }).ToList();
             }
         }
 
@@ -60,7 +82,7 @@ namespace TP07.Models
         }
 
 
-        public static void EliminarTarea (int IDtarea)   
+        public static void EliminarTarea(int IDtarea)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -70,7 +92,7 @@ namespace TP07.Models
             }
         }
 
-        public static Tarea TraerTarea (int IDtarea)
+        public static Tarea TraerTarea(int IDtarea)
         {
             Tarea t = new Tarea();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -83,31 +105,31 @@ namespace TP07.Models
 
         }
 
-        public static void ActualizarTarea (Tarea t)
+        public static void ActualizarTarea(Tarea t)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "UPDATE Tareas SET Titulo = @t.Titulo, Descripcion = @t.Descripcion, Fecha = @t.Fecha WHERE ID = t.ID";
-                 connection.Execute(query, new {  t.ID, t.Titulo, t.Descripcion, t.Fecha });
+                connection.Execute(query, new { t.ID, t.Titulo, t.Descripcion, t.Fecha });
             }
 
         }
 
-        public static void FinalizarTarea (int IDtarea)
+        public static void FinalizarTarea(int IDtarea)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "UPDATE Tareas SET Finalizada = 1 WHERE ID = @IDtarea";
-                 connection.Execute(query, new { IDtarea });
+                connection.Execute(query, new { IDtarea });
             }
         }
 
-        public static void ActualizarFechaLogin (int IDusuario)
+        public static void ActualizarFechaLogin(int IDusuario)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "UPDATE Usuarios SET UltimoLogin = GETDATE() WHERE ID = @IDusuario";
-                 connection.Execute(query, new { IDusuario });
+                connection.Execute(query, new { IDusuario });
             }
         }
 

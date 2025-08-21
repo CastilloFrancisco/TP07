@@ -2,73 +2,88 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TP07.Models;
 
-namespace TP7.Controllers;
-
-public class HomeController : Controller
+namespace TP7.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
 
-    public IActionResult Index()
-    {
-        if(int.Parse(HttpContext.Session.GetString("logeado") = null || int.Parse(HttpContext.Session.GetString("logeado") = 0){
-                    return View("Login");
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")) || int.Parse(HttpContext.Session.GetString("UsuarioId")) == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+            ViewBag.Usuario = BD.TraerUsuarioPorId(IDu);
+
+            ViewBag.Tareas = BD.DevolverTareas(IDu);
+
+            return View();
+        }
+
+        public IActionResult CargarTareas()
+        {
+            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+            ViewBag.TareasIntegrante = BD.DevolverTareas(IDu);
+
+            return View();
+        }
+
+        public IActionResult CrearTarea()
+        {
+            return View("Login");
+        }
+
+        public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateTime Fecha, bool Finalizada)
+        {
+            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada, IDu);
+
+            BD.CrearTarea(tareaNueva);
+            return View();
+        }
+
+        public IActionResult FinalizarTarea(int idTarea)
+        {
+            BD.FinalizarTarea(idTarea);
+
+            return View("Index", "Home");
+        }
+
+        public IActionResult EliminarTarea(int idTarea)
+        {
+            BD.FinalizarTarea(idTarea);
+
+            return View("Index", "Home");
+        }
+
+        public IActionResult EditarTarea(int idTarea)
+        {
+            ViewBag.TareaAEditar = BD.TraerTarea(idTarea);
+            if (ViewBag.TareaAEditar == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+
 
         }
-        return View();
-    }
 
-    public IActionResult CargarTareas()
-    {
-        int IDu = int.Parse(HttpContext.Session.GetString("logeado"));
-        ViewBag.TareasIntegrante = BD.DevolverTareas(IDu);
+        public IActionResult EditarTareaGuardar(int idTarea)
+        {
+            //      BD.ActualizarTarea(idTarea);
 
-        return View();
-    }
-
-    public IActionResult CrearTarea()
-    {
-
-        return View("Login.cshtml");
-    }
-
-    public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateOnly Fecha, bool Finalizada)
-    {
-        int IDu = int.Parse(HttpContext.Session.GetString("logeado"));
-
-        Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada, IDu);
-
-        BD.CrearTarea(tareaNueva);
-        return View();
-    }
-
-    public IActionResult FinalizarTarea(int idTarea)
-    {
-        BD.FinalizarTarea(idTarea);
-
-        return View();
-    }
-
-    public IActionResult EliminarTarea(int idTarea)
-    {
-        BD.FinalizarTarea(idTarea);
-
-        return View();
-    }
-
-    public IActionResult EditarTarea(int idTarea)
-    {
-        ViewBag.TareaAEditar = BD.TraerTarea(idTarea);
-        return View();
-    }
-    public IActionResult EditarTareaGuardar(int idTarea)
-    {
-        BD.FinalizarTarea(idTarea);
-
-        return View();
+            return View("Index", "Home");
+        }
     }
 }

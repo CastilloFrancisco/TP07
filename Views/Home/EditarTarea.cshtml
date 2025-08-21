@@ -3,7 +3,8 @@
 }
 
 <div>
-
+@if (ViewBag.TareaEditar != null)
+{
     <form action='@Url.Action("Account", "Home")' method="POST" enctype="multipart/form-data">
 
         Nombre de La Tarea: (Actualmente @(ViewBag.TareaEditar.Nombre))
@@ -14,6 +15,9 @@
         <input type="date" name="fechaF" placeholder="Fecha de Finalización" required />
         
         <input type="submit" value="Iniciar Sesión" class="btn-login" />
-    </form>
+    </form>} else {
+            <p>La tarea no se encontró.</p>
+
+    }
 
 </div>

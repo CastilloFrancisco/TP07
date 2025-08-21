@@ -10,7 +10,7 @@ namespace TP07.Models
     {
         [JsonProperty]
         public int ID { get; set; }
-        [JsonProperty]
+        [JsonProperty] 
         public string Username { get; set; }
         [JsonProperty]
         public string Pass { get; set; }
@@ -21,7 +21,7 @@ namespace TP07.Models
         [JsonProperty]
         public string Foto { get; set; }
         [JsonProperty]
-        public DateOnly UltimoLogin { get; set; }
+        public DateTime UltimoLogin { get; set; }
     
         public Usuario()
         {

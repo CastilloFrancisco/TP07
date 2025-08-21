@@ -12,23 +12,25 @@ public class AccountController : Controller
     {
         _logger = logger;
     }
+    public IActionResult Login()
+    {
+        return View();
+    }
 
     [HttpPost]
-    public IActionResult Login(string usuario, string contraseña)
+    public IActionResult Logear(string usuario, string contraseña)
     {
         if (BD.Registro(usuario, contraseña))
         {
             Usuario integrante = BD.Login(usuario);
-
             HttpContext.Session.SetString("UsuarioId", integrante.ID.ToString());
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         ViewBag.Error = true;
-        return View("Index");
+        return View("Login");
     }
-
     public IActionResult CerrarSesión(string usuario, string contraseña)
     {
         HttpContext.Session.SetString("UsuarioId", "0");
