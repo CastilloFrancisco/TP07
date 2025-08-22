@@ -55,7 +55,7 @@ namespace TP07.Models
                 string query = "INSERT INTO Usuarios (Username, Pass, Nombre, Apellido, Foto, UltimoLogin) " +
                                "VALUES (@u.Username, @u.Pass, @u.Nombre, @u.Apellido, @u.Foto, @u.UltimoLogin)";
 
-                connection.Execute(query, new {u.Username, u.Pass, u.Nombre, u.Apellido, u.Foto, u.UltimoLogin});
+                connection.Execute(query, new { u.Username, u.Pass, u.Nombre, u.Apellido, u.Foto, u.UltimoLogin });
             }
         }
 
@@ -109,10 +109,10 @@ namespace TP07.Models
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "UPDATE Tareas SET Titulo = @t.Titulo, Descripcion = @t.Descripcion, Fecha = @t.Fecha WHERE ID = t.ID";
-                connection.Execute(query, new { t.ID, t.Titulo, t.Descripcion, t.Fecha });
-            }
+                string query = @"UPDATE Tareas SET Titulo = @Titulo, Descripcion = @Descripcion, Fecha = @Fecha WHERE ID = @ID";
 
+                connection.Execute(query, new { ID = t.ID, Titulo = t.Titulo, Descripcion = t.Descripcion, Fecha = t.Fecha });
+            }
         }
 
         public static void FinalizarTarea(int IDtarea)

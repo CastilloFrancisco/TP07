@@ -3,21 +3,18 @@
 }
 
 <div>
-@if (ViewBag.TareaEditar != null)
+@if (ViewBag.TareaAEditar != null)
 {
-    <form action='@Url.Action("Account", "Home")' method="POST" enctype="multipart/form-data">
+    <form action='@Url.Action("EditarTareaGuardar", "Home")' method="POST" enctype="multipart/form-data">
 
-        Nombre de La Tarea: (Actualmente @(ViewBag.TareaEditar.Nombre))
+        Nombre de La Tarea:
         <input type="text" name="nombre" placeholder="Nombre de Tarea" required />
-        Descripción (Actualmente @(ViewBag.TareaEditar.Descripción))
+        Descripción:
         <input type="text" name="desc" placeholder="Descripción" required />
-        Descripción (Actualmente @(ViewBag.TareaEditar.Fecha))
+        Fecha:
         <input type="date" name="fechaF" placeholder="Fecha de Finalización" required />
         
-        <input type="submit" value="Iniciar Sesión" class="btn-login" />
-    </form>} else {
-            <p>La tarea no se encontró.</p>
-
-    }
+        <input type="submit" value="Guardar Cambios" class="btn-login" />
+    </form>} 
 
 </div>

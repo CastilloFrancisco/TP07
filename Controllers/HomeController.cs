@@ -55,15 +55,15 @@ namespace TP7.Controllers
         public IActionResult FinalizarTarea(int idTarea)
         {
             BD.FinalizarTarea(idTarea);
+            return RedirectToAction("Index", "Home");
 
-            return View("Index", "Home");
         }
 
         public IActionResult EliminarTarea(int idTarea)
         {
             BD.FinalizarTarea(idTarea);
 
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult EditarTarea(int idTarea)
@@ -78,10 +78,15 @@ namespace TP7.Controllers
 
 
         }
+        [HttpPost]
 
-        public IActionResult EditarTareaGuardar(int idTarea)
+        public IActionResult EditarTareaGuardar(string nombre, string desc, DateTime fechaF)
         {
-            //      BD.ActualizarTarea(idTarea);
+            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            Tarea t = new Tarea(nombre, desc, fechaF, false, IDu);
+
+            BD.ActualizarTarea(t);
 
             return View("Index", "Home");
         }
