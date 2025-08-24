@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Compartir Tareas";
+}
+
+<section class="form-container">
+    <h2>Compartir: @ViewBag.TareaCompartir.Titulo</h2>
+
+    <form action="@Url.Action("CompartirTareasGuardar", "Home")" method="post" class="form-box">
+
+        <input type="hidden" name="IDt" value="@ViewBag.TareaCompartir.ID" />
+
+        @foreach (Usuario u in ViewBag.OtrosUsuarios)
+        {
+            <div class="usuario-card">
+                <img src="@(u.Foto)" alt=" " class="perfil-foto" />
+                <h3>@(u.Nombre) @(u.Apellido)</h3>
+                <input type="checkbox" name="compartirA" value="@u.ID" />
+            </div>
+        }
+
+        <input type="submit" value="Compartir" class="btn-login" />
+    </form>
+</section>

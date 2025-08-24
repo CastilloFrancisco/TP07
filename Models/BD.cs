@@ -9,7 +9,7 @@ namespace TP07.Models
     {
         private static string _connectionString = "Server=localhost;Database=ToDoList;Integrated Security=True;TrustServerCertificate=True;";
 
-        public static Usuario Login(string user)
+        public static Usuario TraerUsuario(string user)
         {
             Usuario u = new Usuario();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -22,9 +22,9 @@ namespace TP07.Models
 
         }
 
-        public static bool Registro(string user, string contraseña)
+        public static bool LogIn(string user, string contraseña)
         {
-            Usuario usuario = Login(user);
+            Usuario usuario = TraerUsuario(user);
             if (usuario == null) return false;
 
             bool logeado = false;
@@ -48,12 +48,11 @@ namespace TP07.Models
             return u;
         }
 
-        public static void CrearUsuario(Usuario u)
+        public static void RegistrarUsuario(Usuario u)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Usuarios (Username, Pass, Nombre, Apellido, Foto, UltimoLogin) " +
-                               "VALUES (@u.Username, @u.Pass, @u.Nombre, @u.Apellido, @u.Foto, @u.UltimoLogin)";
+                string query = "INSERT INTO Usuarios (Username, Pass, Nombre, Apellido, Foto, UltimoLogin) VALUES (@Username, @Pass, @Nombre, @Apellido, @Foto, @UltimoLogin)";
 
                 connection.Execute(query, new { u.Username, u.Pass, u.Nombre, u.Apellido, u.Foto, u.UltimoLogin });
             }
@@ -63,22 +62,40 @@ namespace TP07.Models
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Tareas WHERE IdUsuario = @idUsuario";
+                string query = "SELECT * FROM Tareas WHERE IdUsuario = @idUsuario AND Eliminado = 0";
 
                 return connection.Query<Tarea>(query, new { idUsuario = IDusuario }).ToList();
             }
         }
 
+        public static List<Usuario> DevolverUsuarios()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Usuarios";
+
+                return connection.Query<Usuario>(query).ToList();
+            }
+        }
+
+
+        public static List<Tarea> DevolverTareasEliminadas(int IDusuario)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Tareas WHERE IdUsuario = @idUsuario AND Eliminado = 1";
+
+                return connection.Query<Tarea>(query, new { idUsuario = IDusuario }).ToList();
+            }
+        }
 
         public static void CrearTarea(Tarea t)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = " INSERT INTO Tareas (Titulo, Descripcion, Fecha, Finalizada, IdUsuario) VALUES (@t.Titulo, @t.Descripcion, @t.Fecha, @t.Finalizada, @t.IdUsuario)";
-
+                string query = @"INSERT INTO Tareas (Titulo, Descripcion, Fecha, Finalizada, IdUsuario, FechaCreacion, Eliminado) VALUES (@Titulo, @Descripcion, @Fecha, @Finalizada, @IdUsuario, GETDATE(), 0)";
                 connection.Execute(query, new { t.Titulo, t.Descripcion, t.Fecha, t.Finalizada, t.IdUsuario });
             }
-
         }
 
 
@@ -86,7 +103,7 @@ namespace TP07.Models
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = " DELETE FROM Tareas WHERE ID = @IDtarea";
+                string query = @"UPDATE Tareas SET Eliminado = 1, FechaEliminacion = GETDATE() WHERE ID = @IDtarea";
 
                 connection.Execute(query, new { IDtarea });
             }
@@ -109,7 +126,7 @@ namespace TP07.Models
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = @"UPDATE Tareas SET Titulo = @Titulo, Descripcion = @Descripcion, Fecha = @Fecha WHERE ID = @ID";
+                string query = @"UPDATE Tareas SET Titulo = @Titulo, Descripcion = @Descripcion, Fecha = @Fecha, FechaModificacion = GETDATE() WHERE ID = @ID";
 
                 connection.Execute(query, new { ID = t.ID, Titulo = t.Titulo, Descripcion = t.Descripcion, Fecha = t.Fecha });
             }
@@ -133,6 +150,23 @@ namespace TP07.Models
             }
         }
 
+        public static void RestaurarTarea(int IDtarea)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Tareas SET Eliminado = 0, FechaEliminacion = NULL WHERE ID = @IDtarea";
+                connection.Execute(query, new { IDtarea });
+            }
+        }
+        public static List<Usuario> DevolverOtrosUsuarios(int ID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Usuarios WHERE ID <> @idUsuario";
+
+                return connection.Query<Usuario>(query, new { idUsuario = ID }).ToList();
+            }
+        }
 
     }
 }

@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Registrarse";
+}
+
+<div class="form-container">
+    <form action='@Url.Action("RegistrarUsuario", "Account")' method="POST" enctype="multipart/form-data" class="form-box">
+
+        <label>Usuario:</label>
+        <input type="text" name="usuario" placeholder="Usuario" required />
+
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" placeholder="Contraseña" required />
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" placeholder="Nombre" required />
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido" placeholder="Apellido" required />
+
+        <label>Foto (Link):</label>
+        <input type="text" name="foto" placeholder="Foto (link)" required />
+
+        <input type="submit" value="Crear Usuario" class="btn-login" />
+    </form>
+</div>

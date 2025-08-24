@@ -4,26 +4,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NombreProyecto</title>
+    <title>@ViewData["Title"] - TP07</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
 <body>
-    <header>
-        NombreProyecto
-    </header>
+    <div class="page-wrapper">
+        <header class="main-header">
+            <a href="@Url.Action("Index", "Home")" class="logo">ToDo List</a>
+        </header>
 
-    <main role="main">
-        @RenderBody()
-    </main>
+        <main role="main" class="main-content">
+            @RenderBody()
+        </main>
 
-    <footer>
-        &copy; @DateTime.Now.Year - NombreProyecto
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <footer class="main-footer">
+            &copy; @DateTime.Now.Year - Fran
+        </footer>
+    </div>
 </body>
 
 </html>

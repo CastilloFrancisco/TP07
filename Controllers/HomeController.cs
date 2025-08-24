@@ -26,30 +26,27 @@ namespace TP7.Controllers
 
             ViewBag.Tareas = BD.DevolverTareas(IDu);
 
-            return View();
-        }
-
-        public IActionResult CargarTareas()
-        {
-            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
-            ViewBag.TareasIntegrante = BD.DevolverTareas(IDu);
+            ViewBag.MostarPapelera = (BD.DevolverTareasEliminadas(IDu).Count > 0);
 
             return View();
         }
 
         public IActionResult CrearTarea()
         {
-            return View("Login");
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")) || int.Parse(HttpContext.Session.GetString("UsuarioId")) == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View();
         }
-
-        public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateTime Fecha, bool Finalizada)
+        public IActionResult CrearTareaGuardar(string Titulo, string Descripcion, DateTime FechaFin, bool Finalizada)
         {
             int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
 
-            Tarea tareaNueva = new Tarea(Titulo, Descripcion, Fecha, Finalizada, IDu);
+            Tarea tareaNueva = new Tarea(Titulo, Descripcion, FechaFin, Finalizada, IDu);
 
             BD.CrearTarea(tareaNueva);
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult FinalizarTarea(int idTarea)
@@ -61,13 +58,17 @@ namespace TP7.Controllers
 
         public IActionResult EliminarTarea(int idTarea)
         {
-            BD.FinalizarTarea(idTarea);
+            BD.EliminarTarea(idTarea);
 
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult EditarTarea(int idTarea)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")) || int.Parse(HttpContext.Session.GetString("UsuarioId")) == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             ViewBag.TareaAEditar = BD.TraerTarea(idTarea);
             if (ViewBag.TareaAEditar == null)
             {
@@ -80,15 +81,80 @@ namespace TP7.Controllers
         }
         [HttpPost]
 
-        public IActionResult EditarTareaGuardar(string nombre, string desc, DateTime fechaF)
+        public IActionResult EditarTareaGuardar(int IDt, string nombre, string desc, DateTime fechaF)
         {
             int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
 
-            Tarea t = new Tarea(nombre, desc, fechaF, false, IDu);
+            Tarea t = new Tarea(IDt, nombre, desc, fechaF, false, IDu);
 
             BD.ActualizarTarea(t);
 
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Papelera()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")) || int.Parse(HttpContext.Session.GetString("UsuarioId")) == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            List<Tarea> borradas = BD.DevolverTareasEliminadas(int.Parse(HttpContext.Session.GetString("UsuarioId")));
+
+            ViewBag.TareasBorradas = borradas;
+
+            
+            return View();
+
+
+        }
+        [HttpPost]
+
+        public IActionResult PapeleraGuardar(List<int> sacarDeLaPapelera)
+        {
+            int IDu = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            foreach (int i in sacarDeLaPapelera)
+            {
+                BD.RestaurarTarea(i);
+            }
+
+
+            return RedirectToAction("Index", "Home");
+        }
+        
+          public IActionResult CompartirTareas(int idTarea)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")) || int.Parse(HttpContext.Session.GetString("UsuarioId")) == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int idU = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+
+            List<Usuario> gente = BD.DevolverOtrosUsuarios(idU);
+
+            ViewBag.OtrosUsuarios = gente;
+
+            ViewBag.TareaCompartir = BD.TraerTarea(idTarea);
+
+            return View();
+        }
+        [HttpPost]
+
+        public IActionResult CompartirTareasGuardar(int IDt, List<int> compartirA)
+        {
+
+            foreach (int i in compartirA)
+            {
+                Tarea T = BD.TraerTarea(IDt);
+                T.IdUsuario = i;
+
+                BD.CrearTarea(T);
+                
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

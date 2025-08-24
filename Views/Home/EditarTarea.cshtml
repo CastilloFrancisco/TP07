@@ -1,20 +1,23 @@
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Editar Tarea";
 }
 
-<div>
-@if (ViewBag.TareaAEditar != null)
-{
-    <form action='@Url.Action("EditarTareaGuardar", "Home")' method="POST" enctype="multipart/form-data">
+<div class="form-container">
+    @if (ViewBag.TareaAEditar != null)
+    {
+        <form action='@Url.Action("EditarTareaGuardar", "Home")' method="POST" enctype="multipart/form-data" class="form-box">
+            <input type="hidden" name="IDt" value="@ViewBag.TareaAEditar.ID" />
 
-        Nombre de La Tarea:
-        <input type="text" name="nombre" placeholder="Nombre de Tarea" required />
-        Descripción:
-        <input type="text" name="desc" placeholder="Descripción" required />
-        Fecha:
-        <input type="date" name="fechaF" placeholder="Fecha de Finalización" required />
-        
-        <input type="submit" value="Guardar Cambios" class="btn-login" />
-    </form>} 
+            <label>Nombre:</label>
+            <input type="text" name="nombre" value="@ViewBag.TareaAEditar.Titulo" required />
 
+            <label>Descripción:</label>
+            <input type="text" name="desc" value="@ViewBag.TareaAEditar.Descripcion" required />
+
+            <label>Fecha:</label>
+            <input type="date" name="fechaF" value="@ViewBag.TareaAEditar.Fecha.ToString("yyyy-MM-dd")" required />
+
+            <input type="submit" value="Guardar Cambios" class="btn-login" />
+        </form>
+    }
 </div>

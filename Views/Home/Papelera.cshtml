@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Papelera";
+}
+
+<section class="form-container">
+    <form action="@Url.Action("PapeleraGuardar", "Home")" method="post" class="form-box">
+        @foreach (Tarea tarea in ViewBag.TareasBorradas)
+        {
+            <div class="tarea-card borrada">
+                <h3>@tarea.Titulo</h3>
+                Restaurar: <input type="checkbox" name="sacarDeLaPapelera" value="@tarea.ID" />
+            </div>
+        }
+
+        <input type="submit" value="Guardar" class="btn-login" />
+    </form>
+</section>

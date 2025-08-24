@@ -20,19 +20,43 @@ namespace TP07.Models
         public bool Finalizada { get; set; }
         [JsonProperty]
         public int IdUsuario { get; set; }
+        [JsonProperty]
+        public DateTime FechaCreación { get; set; }
+        [JsonProperty]
+        public DateTime? FechaModificación { get; set; }
+        [JsonProperty]
+        public DateTime? FechaEliminación { get; set; }
+        [JsonProperty]
+        public bool Eliminado { get; set; }
 
         public Tarea()
         {
 
         }
-        public Tarea( string pTitulo, string pDescripcion, DateTime pFecha, bool pFinalizada, int IdU)
+        public Tarea(int pID, string pTitulo, string pDescripcion, DateTime pFecha, bool pFinalizada, int IdU)
         {
+            ID = pID;
             Titulo = pTitulo;
-            Descripcion = pDescripcion; 
-            Fecha = pFecha; 
+            Descripcion = pDescripcion;
+            Fecha = pFecha;
             Finalizada = pFinalizada;
             IdUsuario = IdU;
+            FechaCreación = DateTime.Now;
+            Eliminado = false;
+
         }
 
+        public Tarea(string pTitulo, string pDescripcion, DateTime pFecha, bool pFinalizada, int IdU)
+        {
+            Titulo = pTitulo;
+            Descripcion = pDescripcion;
+            Fecha = pFecha;
+            Finalizada = pFinalizada;
+            IdUsuario = IdU;
+            FechaCreación = DateTime.Now;
+            Eliminado = false;
+
+
+        }
     }
 }
